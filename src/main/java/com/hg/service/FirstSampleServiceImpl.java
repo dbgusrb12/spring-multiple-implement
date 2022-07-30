@@ -9,4 +9,9 @@ public class FirstSampleServiceImpl implements SampleService {
     public void print() {
         System.out.println("FirstSampleServiceImpl print!");
     }
+
+    @Override
+    public void print(String type) {
+        System.out.println(type + " FirstSampleServiceImpl print!");
+    }
 }

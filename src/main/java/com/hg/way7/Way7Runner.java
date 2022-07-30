@@ -11,6 +11,7 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Component;
  * way6 에서 bean name 이 string 문자열인게 type safety 하지 않다고 생각해 class 기반으로 검색 할 수 있게 수정
  */
 @Component
+@Slf4j
 public class Way7Runner implements ApplicationRunner {
 
     private Map<SampleServiceType, SampleService> sampleServiceMap;
@@ -26,9 +28,13 @@ public class Way7Runner implements ApplicationRunner {
     public Way7Runner(List<SampleService> sampleServices) {
         sampleServiceMap = new HashMap<>();
         for (SampleService sampleService : sampleServices) {
-            SampleServiceType sampleServiceType = SampleServiceType.typeOf(
-                sampleService.getClass());
-            sampleServiceMap.put(sampleServiceType, sampleService);
+            try {
+                SampleServiceType sampleServiceType = SampleServiceType.typeOf(
+                    sampleService.getClass());
+                sampleServiceMap.put(sampleServiceType, sampleService);
+            } catch (RuntimeException e) {
+                log.error("MainSampleServiceImpl is not defined ==> {}", e.getMessage());
+            }
         }
     }
 

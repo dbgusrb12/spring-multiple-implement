@@ -11,19 +11,25 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 @Component
-public class SampleServiceAdapter {
+@Slf4j
+public class SampleServiceFactory {
 
     private Map<SampleServiceType, SampleService> sampleServiceMap;
 
-    public SampleServiceAdapter(List<SampleService> sampleServices) {
+    public SampleServiceFactory(List<SampleService> sampleServices) {
         sampleServiceMap = new HashMap<>();
         for (SampleService sampleService : sampleServices) {
-            SampleServiceType sampleServiceType = SampleServiceType.typeOf(
-                sampleService.getClass());
-            sampleServiceMap.put(sampleServiceType, sampleService);
+            try {
+                SampleServiceType sampleServiceType = SampleServiceType.typeOf(
+                    sampleService.getClass());
+                sampleServiceMap.put(sampleServiceType, sampleService);
+            } catch (RuntimeException e) {
+                log.error("MainSampleServiceImpl is not defined ==> {}", e.getMessage());
+            }
         }
     }
 

@@ -1,7 +1,7 @@
 package com.hg.way8;
 
 import com.hg.service.SampleService;
-import com.hg.way8.SampleServiceAdapter.SampleServiceType;
+import com.hg.way8.SampleServiceFactory.SampleServiceType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class Way8Runner implements ApplicationRunner {
 
-    private final SampleServiceAdapter sampleServiceAdapter;
+    private final SampleServiceFactory sampleServiceFactory;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -23,7 +23,7 @@ public class Way8Runner implements ApplicationRunner {
     }
 
     public void sampleServicePrint(SampleServiceType type) {
-        SampleService sampleService = sampleServiceAdapter.getSampleService(type);
+        SampleService sampleService = sampleServiceFactory.getSampleService(type);
         sampleService.print();
     }
 }
